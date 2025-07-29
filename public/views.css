@@ -1,0 +1,8 @@
+body {
+    background-color: grey;
+}
+
+.img {
+    border-color: aqua;
+    border-radius: 5em;
+}
