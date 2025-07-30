@@ -9,7 +9,54 @@
   </head>
   <body>
   <%- include('fragments/header') %>
+    <h2>Liste des tickets</h2>
+    <section class="tickets-container">
+            <div >
+               <% if(tickets.length === 0) { %>
+               <p>Aucun ticket</p>
+               <% } %> <% for (let i = 0; i < tickets.length; i++) { %>
+               <div class="ticket">
+                  <div class="ticket-header">
+                     <h2 class="ticket-title">
+                        <a href="/tickets/<%= tickets[i].id %>"
+                           ><%= tickets[i].titre %></a
+                        >
+                     </h2>
 
+                     <p class="ticket-description">
+                        <%- tickets[i].description %>
+                     </p>
+                     <div class="ticket-etat">
+                        <% if(tickets[i].etat === 'OUVERT') { %>
+                        <span class="ticket-etat ouvert">Ouvert</span>
+                        <% } else { %>
+                        <span class="ticket-etat clos">Clos</span>
+                        <% } %>
+                     </div>
+                     <div class="ticket-meta">
+                        <span class="ticket-auteur"
+                           ><%= tickets[i].auteur.name %></span
+                        >
+                        <span class="ticket-date"
+                           ><%=tickets[i].creation_formatted %></span
+                        >
+                     </div>
+                  </div>
+               </div>
+               <% } %>
+            </div>
+         </section>
+<!--      <div>
+        <% tickets.forEach(ticket => { %>
+          <tr>
+            <td><%= ticket.titre %></td>
+            <td><%= ticket.date_creation %></td>
+
+            <td><%= ticket.description %></td>
+            <td><%= ticket.etat %></td>
+          </tr>
+        <% }) %>
+        </div>>     -->  
 
   <%- include('fragments/footer') %>
 
