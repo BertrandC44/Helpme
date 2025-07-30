@@ -129,23 +129,20 @@ h2 {
   font-weight: bold;
   text-align: center;
   min-width: 80px;
-
-
-
   font-weight: bold;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.85em;
 }
 
-.ticket-etat.ouvert {
+.ticket-etat.clos {
   color: #155724;
   background-color: #d4edda;
-  border: 1px solid #c3e6cb;
+  border: 2px solid #a6ccaf;
 }
 
-.ticket-etat.clos {
-  color: #721c24;
+.ticket-etat.ouvert {
+  color: #721c24 ;
   background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
+  border: 2px solid #d48c93;
 }
