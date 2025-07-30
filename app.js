@@ -24,6 +24,33 @@ app.get("/", (req, res) => {
 
 app.listen(3333);
 
+// const express = require("express");
+// const app = express();
+// app.use(express.static("public"));
+
+// // EJS
+// app.set("views", "./views");
+// app.set("view engine", "ejs");
+
+// let message = "je suis un super message";
+
+// app.get("/", (req, res) => {
+//   // 1 - On récupère les informations dans la requête
+
+//   // 2 - On fait le traitement métier
+
+//   // 3 - Afficher les résultats des traitements = Afficher la page suivante
+
+//   res.render("home", {
+//     message: message,
+//     monInfo: "bla bla bla",
+//     condition: false,
+//   });
+// });
+
+// app.listen(3333);
+ 
+
 
 
 
