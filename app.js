@@ -5,11 +5,9 @@ const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 3000;
 
-<<<<<<< Updated upstream
-=======
 app.use(express.static("public"));
 
->>>>>>> Stashed changes
+
 // EJS
 app.set("views", "./views");
 app.set("view engine", "ejs");
@@ -23,11 +21,6 @@ app.get("/", (req, res) => {
     condition: true,
   });
 });
-<<<<<<< Updated upstream
-app.use(express.static("public"));
-app.listen(3333);
-
-=======
 
 app.listen(3333);
 
@@ -65,7 +58,7 @@ app.listen(3333);
 
 
 
->>>>>>> Stashed changes
+
 //MiddleWhere
 app.get("/", (req, res) => {
   res.send("Hello Wooooooooooooorld!");

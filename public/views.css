@@ -1,8 +1,49 @@
-body {
-    background-color: grey;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.img {
-    border-color: aqua;
-    border-radius: 5em;
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f8f8;
+}
+
+header {
+  background-color: #658db4;
+  color: white;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Partie gauche : logo + titre */
+header div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#img_tickets {
+  width: 80px;
+  height: auto;
+}
+
+/* Titre */
+header h1 {
+  font-size: 2rem;
+}
+
+/* Liens de navigation */
+header div:last-child a {
+  margin-left: 20px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+header div:last-child a:hover {
+  color: #1abc9c;
 }
