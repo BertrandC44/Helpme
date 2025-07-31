@@ -1,73 +1,23 @@
-"use strict";
-
 const express = require("express");
-const { setTickets, findTickets } = require("./services/ticketsService");
 const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 3000;
 
 app.use(express.static("public"));
-
-let ticketsRoutes = require("./routes/ticketRoutes");
+app.use(express.urlencoded({ extended: false }));
 
 // EJS
 app.set("views", "./views");
 app.set("view engine", "ejs");
 
-app.get(["/", "/tickets"], ticketsRoutes.afficherTicket);
+// Import des routers
+const ticketsRoutes = require("./routes/ticketsRoutes");
+const usersRoutes = require("./routes/usersRoutes");
 
+// Utilisation des routers
+app.use("/", ticketsRoutes); // toutes les routes de tickets à la racine "/"
+app.use("/", usersRoutes); // toutes les routes utilisateurs à la racine "/"
 
 app.listen(port, () => {
   console.log(`Serveur démarré sur http://localhost:${port}`);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// //MiddleWhere
-// app.get("/", (req, res) => {
-//   res.send("Hello Wooooooooooooorld!");
-// });
-
-// app.get("/toto", (req, res) => {
-//   res.send("Bonjour Toto");
-// });
-
-// //Query Parameter
-// app.get("/toto/tutu", (req, res) => {
-//   res.send(`Bonjour ${req.query.nom}`);
-// });
-
-// app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}`);
-// });
