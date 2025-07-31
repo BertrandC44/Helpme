@@ -7,6 +7,16 @@
     </div>
     <div>
     <a href="../liste-tickets">Accueil</a>
-    <a href="../login">Se Connecter</a>
-    </div>
+
+    <% if (session?.user) { %>
+    <a class="nav-link" href="/new-ticket">Nouveau Ticket</a>
+    <% } %>
+
+    <% if (session?.user) { %>
+    <a class="nav-link" href="/logout">Se d&eacute;connecter</a>
+    <% } else { %>
+    <a class="nav-link" href="/login">Se connecter</a>
+    <% } %>
+    
+  </div>
   </header>

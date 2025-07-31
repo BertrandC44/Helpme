@@ -62,6 +62,7 @@ h2 {
   display: flex;
   justify-content: center;
 }
+
 .ticket-container {
   max-width: 900px;
   margin: 0 auto;
@@ -146,4 +147,25 @@ h2 {
   color: #721c24 ;
   background-color: #f8d7da;
   border: 2px solid #d48c93;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #dddddd;
+  border: 2.5px solid #658db4;
+  border-left: 5px solid #658db4;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px;
+  margin-left: 100px;
+  margin-right: 100px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
 }

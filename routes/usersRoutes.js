@@ -12,11 +12,11 @@ router.post("/login", (req, res) => {
 
   if (user) {
     req.session.user = user;
-    res.redirect("/tickets");
+    res.redirect("/liste-tickets");
   } else {
     res.status(401).render("login", {
       session: req.session,
-      erreurConexion: "Identifiant ou mot de passe incorrect",
+      erreurConexion: "Identifiant et/ou mot de passe incorrect",
     });
   }
 });
@@ -28,7 +28,7 @@ router.get("/logout", (req, res) => {
       console.log("Session détruite");
     });
   }
-  res.redirect("/tickets");
+  res.redirect("/liste-tickets");
 });
 
 module.exports = router;

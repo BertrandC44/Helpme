@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="/views.css">
+    <title>HELP-ME    NEW TICKET</title>
+  </head>
+  <body>
+  <%- include('fragments/header') %>
+    <h2>NOUVEAU TICKET</h2>
+    <section class="new-ticket-container">
+    <form action="/new-ticket/download" method="post" class="new-ticket-form">
+    <input type="hidden" name="_id" value="<%= ticket?._id %>" />
+
+    <div>
+    <label for="titre">Titre</label>
+    <input type="text" name="titre" required />
+    </div>
+
+    <div>
+    <label for="description">Description</label>
+    <textarea name="description" required></textarea> </textarea>
+    </div>
+
+    </form>
+      </div>
+
+    </section>
+
+
+  <%- include('fragments/footer') %>
+
+  </body>
+</html>
