@@ -24,10 +24,14 @@ exports.findTickets = async (filtreEtat = EtatTicket.TOUS, tri = "asc") => {
   return tabtickets;
 };
 
-exports.findTicketById = (id) => {
-  let ticket = tickets.find((ticket) => ticket._id == id);
-
-  return { ...ticket }; //shallow copy
+exports.findTicketById = async (filtreEtat = EtatTicket.TOUS, tri = "asc") => {
+  let tabtickets;
+  try {
+    tabtickets = await db.collection("tickets").find().toArray();
+  } catch (error) {
+    throw error;
+  }
+  return tabtickets;
 };
 
 exports.deleteTicket = (id) => {

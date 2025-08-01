@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>HELP-ME - Détail ticket</title>
+    <link rel="stylesheet" href="/views.css" />
+   </head>
+   <body>
+      <%- include('fragments/header') %>
+
+      <div class="page-container">
+         <h1 class="page-title"><%= ticket.titre %></h1>
+
+         <h3 class="">Description :</h3>
+         <p class=""><%= ticket.description %></p>
+         <% if (session.user && (session.user.role == 2 || session.user._id === ticket.auteur._id)) { %>
+         <div class="actions-capsules">
+            <a
+               class="btn btn-capsule"
+               href="/tickets/<%= ticket._id %>/modifier"
+               >Modifier</a
+            >
+            <a
+               class="btn btn-capsule"
+               href="/tickets/<%= ticket._id %>/supprimer"
+               >Supprimer</a
+            >
+         </div>
+         <% } %>
+      </div>
+
+      <%- include('fragments/footer') %>
+   </body>
+</html>

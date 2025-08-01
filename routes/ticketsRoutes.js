@@ -4,6 +4,8 @@ const { format } = require("date-fns");
 const {
   deleteTicket,
   findTicketById,
+  addTicket,
+  updateTicket,
 } = require("../services/ticketsService");
 const {
   isAuthenticated,
@@ -82,14 +84,30 @@ router.post(
     const auteur = req.session.user;
 
     if (!_id) {
-      addTicket(auteur, titre, description);
+      addTicket(titre, auteur, description);
     } else {
       updateTicket(_id, titre, description);
     }
 
-    res.redirect("/tickets");
+    res.redirect("/liste-tickets");
   }
 );
+
+/* Affichage de la page détail d'un ticket */
+router.get('/tickets/:id', async function (req, res) {
+   const ticket = await ticketsService.findTicketById(req.params.id);
+
+   if (!ticket) {
+    
+
+      throw new Error('Le ticket ' + req.params.id + " n'a pas été trouvé");
+   }
+
+   res.render("detail-ticket", {
+      session: req.session,
+      ticket: ticket,
+   });
+});
 
 // GET /tickets/:id/supprimer
 router.get("/tickets/:id/supprimer", isFormateurOrAuteur, (req, res) => {
