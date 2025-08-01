@@ -1,51 +1,61 @@
 const Role = Object.freeze({
-   ROLE_APPRENANT: 1,
-   ROLE_FORMATEUR: 2,
+  ROLE_APPRENANT: 1,
+  ROLE_FORMATEUR: 2,
 });
 
+// Base utilisateurs simulée (in-memory)
 let users = [
-   {
-      id: 1,
-      username: 'formateur',
-      name: 'formateur',
-      password: process.env.PWD_FORMATEUR || 'Pa$$w0rd',
-      role: Role.ROLE_FORMATEUR,
-   },
-   {
-      id: 2,
-      username: 'alice',
-      password: 'alice',
-      name: 'Alice',
-      role: Role.ROLE_APPRENANT,
-   },
-   {
-      id: 3,
-      username: 'bob',
-      password: 'bob',
-      name: 'Bob',
-      role: Role.ROLE_APPRENANT,
-   },
+  {
+    id: 1,
+    username: "formateur",
+    name: "formateur",
+    password: process.env.PWD_FORMATEUR || "Pa$$w0rd",
+    role: Role.ROLE_FORMATEUR,
+  },
+  {
+    id: 2,
+    username: "alice",
+    name: "Alice",
+    password: "alice",
+    role: Role.ROLE_APPRENANT,
+  },
+  {
+    id: 3,
+    username: "bob",
+    name: "Bob",
+    password: "bob",
+    role: Role.ROLE_APPRENANT,
+  },
 ];
+
 let idx = 4;
 
-const findUserById = (id) => {
-   return users.find((user) => user.id == id);
-};
+/**
+ * Trouve un utilisateur par ID
+ */
+function findUserById(id) {
+  return users.find((user) => user.id === Number(id));
+}
 
-const findUserByUsernameAndPassword = (username, password) => {
-   const user = users.find(
-      (user) => user.username == username && user.password == password,
-   );
-   return user;
-};
+/**
+ * Authentifie un utilisateur par login/mot de passe
+ */
+function findUserByUsernameAndPassword(username, password) {
+  return users.find(
+    (user) => user.username === username && user.password === password
+  );
+}
 
-const deleteUser = (id) => {
-   users = users.filter((user) => user.id != id);
-};
+/**
+ * Supprime un utilisateur par ID
+ */
+function deleteUser(id) {
+  users = users.filter((user) => user.id !== Number(id));
+}
 
 module.exports = {
-   Role,
-   findUserById,
-   findUserByUsernameAndPassword,
-   deleteUser,
+  Role,
+  findUserById,
+  findUserByUsernameAndPassword,
+  deleteUser,
 };

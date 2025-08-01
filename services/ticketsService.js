@@ -1,49 +1,63 @@
-const { Ticket, EtatTicket } = require("../BO/Ticket");
+const { EtatTicket } = require("../bo/Ticket");
+const { db } = require("../app");
 
-let tickets = [
-  {
-    id: 1,
-    titre: "Ticket 1",
-    auteur: { id: 2, name: "Alice" },
-    description: "Description du ticket 1",
-    creation: new Date("2025-06-07T15:30:00Z"),
-    etat: EtatTicket.OUVERT,
-  },
-  {
-    id: 2,
-    titre: "Ticket 2",
-    auteur: { id: 3, name: "Bob" },
-    description: "Description du ticket 2",
-    creation: new Date("2025-06-07T15:35:00Z"),
-    etat: EtatTicket.CLOS,
-  },
-  {
-    id: 3,
-    titre: "Ticket 3",
-    auteur: { id: 3, name: "Bob" },
-    description: "Description du ticket 3",
-    creation: new Date("2025-06-08T15:05:00Z"),
-    etat: EtatTicket.OUVERT,
-  },
-];
-let idx = 4;
+exports.removeAllTickets = () => {
+  tickets = [];
+};
 
-function addTicket(auteur, titre, description) {
-  const id = tickets.length + 1;
-  const ticket = new Ticket(id, auteur, titre, description);
-  tickets.push(ticket);
-  return ticket;
-}
+exports.setTickets = (newTickets) => {
+  tickets = newTickets;
+};
 
-function findTickets() {
-  return [...tickets].sort((a, b) => a.creation - b.creation);
-}
-
-function setTickets(newTickets) {
-  tickets = newTickets.map((ticket) => ({
+exports.findTickets = async (filtreEtat = EtatTicket.TOUS, tri = "asc") => {
+  let tabtickets;
+  try {
+    tabtickets = await db.collection("tickets").find().toArray();
+  } catch (error) {
+    throw error;
+  }
+  // Format de la date et tri
+  tabtickets = tabtickets.map((ticket) => ({
     ...ticket,
-    creation: new Date(ticket.creation),
+    creation_formatted: new Date(ticket.creation).toLocaleString("fr-FR"),
   }));
-}
+  return tabtickets;
+};
 
-module.exports = { addTicket, findTickets, setTickets };
+exports.findTicketById = (id) => {
+  let ticket = tickets.find((ticket) => ticket._id == id);
+
+  return { ...ticket }; //shallow copy
+};
+
+exports.deleteTicket = (id) => {
+  tickets = tickets.filter((ticket) => ticket._id != id);
+};
+
+exports.addTicket = async (titre, auteur, description) => {
+  const creation = Date.now();
+  const newTicket = {
+    titre,
+    auteur,
+    description,
+    creation,
+    etat: EtatTicket.OUVERT,
+  };
+  await db.collection("tickets").insertOne(newTicket);
+
+  return newTicket;
+};
+
+exports.updateTicket = async (id, titre, description, etat) => {
+  let index = db.collection("tickets").findIndex((ticket) => ticket._id == id);
+
+  tickets[index] = {
+    _id: id,
+    titre,
+    auteur: tickets[index].auteur,
+    description,
+    creation: tickets[index].creation,
+    etat: etat != undefined ? etat : tickets[index].etat,
+  };
+  await db.collection("tickets").updateOne(ticket._id);
+};

@@ -1,35 +1,41 @@
-let ticketsService = require('./ticketsService');
+const ticketsService = require("./ticketsService");
 
-module.exports.isAuthenticated = function isAuthenticated(req, res, next) {
-   if (req.session?.user) {
-      next(); // L'utilisateur est connecté, on continue
-   } else {
-      res.redirect('/login'); // Sinon, on redirige vers la page de login
-   }
-};
+/**
+ * Middleware de vérification de l'authentification
+ */
+function isAuthenticated(req, res, next) {
+  if (req.session?.user) {
+    return next();
+  }
+  res.redirect("/login");
+}
 
-module.exports.isFormateurOrAuteur = async function isFormateurOrAuteur(
-   req,
-   res,
-   next,
-) {
-   const ticket = await ticketsService.findTicketById(req.params.id);
+/**
+ * Middleware d'autorisation : formateur ou auteur du ticket
+ */
+async function isFormateurOrAuteur(req, res, next) {
+  const ticket = await ticketsService.findTicketById(req.params.id);
 
-   if (
-      ticket &&
-      req.session?.user &&
-      (req.session.user.role === 'formateur' ||
-         req.session.user._id === ticket.auteur._id)
-   ) {
-      next();
-   } else {
-      res.status(403).render('templates/principal', {
-         bodyFragment: 'pages-fragments/erreur',
-         session: req.session,
-         error: {
-            status: 403,
-            message: '403 Forbidden',
-         },
-      });
-   }
+  const user = req.session?.user;
+
+  const isFormateur = user?.role === "formateur";
+  const isAuteur = ticket?.auteur && user?._id === ticket.auteur._id;
+
+  if (ticket && (isFormateur || isAuteur)) {
+    return next();
+  }
+
+  res.status(403).render("templates/principal", {
+    session: req.session,
+    bodyFragment: "pages-fragments/erreur",
+    error: {
+      status: 403,
+      message: "403 Forbidden",
+    },
+  });
+}
+
+module.exports = {
+  isAuthenticated,
+  isFormateurOrAuteur,
 };

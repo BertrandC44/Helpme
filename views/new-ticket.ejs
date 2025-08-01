@@ -1,36 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="stylesheet" href="/views.css">
-    <title>HELP-ME    NEW TICKET</title>
+    <link rel="stylesheet" href="/views.css" />
+    <title>HELP-ME - Nouveau Ticket</title>
   </head>
   <body>
-  <%- include('fragments/header') %>
-    <h2>NOUVEAU TICKET</h2>
-    <section class="new-ticket-container">
-    <form action="/new-ticket/download" method="post" class="new-ticket-form">
-    <input type="hidden" name="_id" value="<%= ticket?._id %>" />
+    <%- include('fragments/header') %>
+    <main>
+      <h2 class="new-ticket-title"><%= titre %></h2>
 
-    <div>
-    <label for="titre">Titre</label>
-    <input type="text" name="titre" required />
-    </div>
+      <div class="new-tickets-container">
+        <% if (errors && errors.length > 0) { %>
+        <div class="error-message">Des erreurs sont apparues !</div>
+        <% } %>
 
-    <div>
-    <label for="description">Description</label>
-    <textarea name="description" required></textarea> </textarea>
-    </div>
+        <form action="/tickets/enregistrer" class="form" method="post">
+          <input type="hidden" name="_id" value="<%= ticket?._id || '' %>" />
 
-    </form>
+          <!-- Titre -->
+          <label for="titre">Titre <span class="required">*</span></label>
+          <input
+            type="text"
+            id="titre"
+            name="titre"
+            value="<%= ticket?.titre || '' %>"
+            class="form-input"
+            required
+            placeholder="Entrez le titre du ticket"
+          />
+          <% if (errors) { const titreError = errors.find(e => e.path ===
+          'titre'); if (titreError) { %>
+          <p class="error-message"><%= titreError.msg %></p>
+          <% }} %>
+
+          <!-- Description -->
+          <label for="description"
+            >Description <span class="required">*</span></label
+          >
+          <textarea
+            id="description"
+            name="description"
+            class="form-textarea"
+            rows="4"
+            required
+            placeholder="Description du problème rencontré"
+          >
+<%= ticket?.description || '' %></textarea
+          >
+          <% if (errors) { const descriptionError = errors.find(e => e.path ===
+          'description'); if (descriptionError) { %>
+          <p class="error-message"><%= descriptionError.msg %></p>
+          <% }} %>
+
+          <!-- Submit -->
+          <button type="submit" class="form-btn">Valider</button>
+        </form>
       </div>
 
-    </section>
-
-
-  <%- include('fragments/footer') %>
-
+      <%- include('fragments/footer') %>
+    </main>
   </body>
 </html>

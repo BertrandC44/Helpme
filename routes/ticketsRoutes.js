@@ -1,11 +1,21 @@
 const express = require("express");
-const router = express.Router();
-const { setTickets, findTickets, addTicket } = require("../services/ticketsService");
-const { format } = require("date-fns");
 const { body, validationResult } = require("express-validator");
-const { isAuthenticated } = require("../services/authService");
-const { isFormateurOrAuteur} = require("../services/authService");
+const { format } = require("date-fns");
+const {
+  deleteTicket,
+  findTicketById,
+} = require("../services/ticketsService");
+const {
+  isAuthenticated,
+  isFormateurOrAuteur,
+} = require("../services/authService");
 
+const router = express.Router();
+const ticketsService = require('../services/ticketsService');
+
+/**
+ * Convertit un ticket pour l'affichage (DTO)
+ */
 function toTicketDto(ticket) {
   let copie = { ...ticket };
   copie.creation_formatted = format(ticket.creation, "dd/MM/yyyy HH:mm");
@@ -15,31 +25,36 @@ function toTicketDto(ticket) {
   return copie;
 }
 
-/*---Lancer la page de liste de tickets---*/
-router.get(["/", "/liste-tickets"], (req, res) => {
-  let tickets = findTickets();
-
-     for (let i = 0; i < tickets.length; i++) {
-       tickets[i] = toTicketDto(tickets[i]);
-     }
-  res.render("liste-tickets", { tickets });
+// GET /tickets ou /liste-tickets
+router.get(["/", "/liste-tickets"], async (req, res) => {
+  try {
+    let tickets = await ticketsService.findTickets();
+    res.render("liste-tickets", { tickets, session: req.session });
+  } catch (error) {
+    console.error("Erreur récupération tickets :", error);
+    res.status(500).send("Erreur serveur");
+  }
 });
 
-/*---Lancer la page d'ajout de tickets---*/
-router.get("/new-ticket", isAuthenticated, function (req, res) {
+
+// GET /new-ticket
+router.get("/new-ticket", isAuthenticated, (req, res) => {
   res.render("new-ticket", {
     session: req.session,
     titre: "Nouveau ticket",
-    ticket: null,
+    ticket: {},
+    errors: [], // toujours défini pour éviter erreurs dans EJS
   });
 });
 
+// POST /tickets/enregistrer
 router.post(
   "/tickets/enregistrer",
   isAuthenticated,
-  body("titre").trim().notEmpty().withMessage("Champ obligatoire"),
   body("titre")
     .trim()
+    .notEmpty()
+    .withMessage("Champ obligatoire")
     .isLength({ max: 50 })
     .withMessage("Maximum 50 caractères"),
   body("description")
@@ -51,41 +66,35 @@ router.post(
 
   (req, res) => {
     const errors = validationResult(req);
+
+    const { _id, titre, description } = req.body;
+    const ticket = { _id, titre, description };
+
     if (!errors.isEmpty()) {
-      res.render("formulaire-ticket", {
-        titre: "Modification ticket",
+      return res.render("new-ticket", {
         session: req.session,
-        ticket: req.body,
+        titre: _id ? "Modification ticket" : "Nouveau ticket",
+        ticket,
         errors: errors.array(),
       });
-      return;
     }
 
     const auteur = req.session.user;
 
-    if (!req.body._id) {
-      ticketsService.addTicket(req.body.titre, auteur, req.body.description);
+    if (!_id) {
+      addTicket(auteur, titre, description);
     } else {
-      ticketsService.updateTicket(
-        req.body._id,
-        req.body.titre,
-        req.body.description
-      );
+      updateTicket(_id, titre, description);
     }
 
     res.redirect("/tickets");
   }
 );
 
-/* Suppression d'un ticket */
-router.get(
-  "/tickets/:id/supprimer",
-  isFormateurOrAuteur,
-  function (req, res, next) {
-    ticketsService.deleteTicket(req.params.id);
-
-    res.redirect("/tickets");
-  }
-);
+// GET /tickets/:id/supprimer
+router.get("/tickets/:id/supprimer", isFormateurOrAuteur, (req, res) => {
+  deleteTicket(req.params.id);
+  res.redirect("/tickets");
+});
 
 module.exports = router;

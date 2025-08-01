@@ -27,6 +27,7 @@ class Ticket {
 const EtatTicket = {
   OUVERT: "OUVERT",
   CLOS: "CLOS",
+  TOUS: "TOUS",
 };
 
 module.exports = { Ticket, EtatTicket };

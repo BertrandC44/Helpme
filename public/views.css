@@ -165,6 +165,80 @@ h2 {
   transition: box-shadow 0.2s;
 }
 
+/* ---------- Formulaire de création / édition de ticket ---------- */
+
+
+
+.new-tickets-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border: 2.5px solid #658db4;
+  border-left: 5px solid #658db4;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-input,
+.form-textarea {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1.5px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: #658db4;
+  outline: none;
+  box-shadow: 0 0 5px rgba(101, 141, 180, 0.3);
+}
+
+.form-btn {
+  background-color: #658db4;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background-color 0.2s;
+}
+
+.form-btn:hover {
+  background-color: #3b6d93;
+}
+
+/* Champ obligatoire */
+.required {
+  color: red;
+  margin-left: 4px;
+}
+
+/* Erreurs champ par champ */
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
 .error-message {
   color: red;
   font-weight: bold;

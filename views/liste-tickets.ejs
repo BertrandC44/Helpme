@@ -1,64 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="stylesheet" href="/views.css">
-    <title>HELP-ME</title>
+    <link rel="stylesheet" href="/views.css" />
+    <title>HELP-ME - Liste des tickets</title>
   </head>
   <body>
-  <%- include('fragments/header') %>
-    <h2>Liste des tickets</h2>
-    <section class="tickets-container">
-            <div >
-               <% if(tickets.length === 0) { %>
-               <p>Aucun ticket</p>
-               <% } %> <% for (let i = 0; i < tickets.length; i++) { %>
-               <div class="ticket">
-                  <div class="ticket-header">
-                     <h2 class="ticket-title">
-                        <a href="/tickets/<%= tickets[i].id %>"
-                           ><%= tickets[i].titre %></a
-                        >
-                     </h2>
+    <%- include('fragments/header') %>
 
-                     <p class="ticket-description">
-                        <%- tickets[i].description %>
-                     </p>
-                     <div class="ticket-etat">
-                        <% if(tickets[i].etat === 'OUVERT') { %>
-                        <span class="ticket-etat ouvert">Ouvert</span>
-                        <% } else { %>
-                        <span class="ticket-etat clos">Clos</span>
-                        <% } %>
-                     </div>
-                     <div class="ticket-meta">
-                        <span class="ticket-auteur"
-                           ><%= tickets[i].auteur.name %></span
-                        >
-                        <span class="ticket-date"
-                           ><%=tickets[i].creation_formatted %></span
-                        >
-                     </div>
-                  </div>
-               </div>
-               <% } %>
+    <main>
+      <h2>Liste des tickets</h2>
+
+      <section class="tickets-container">
+        <% if (tickets.length === 0) { %>
+        <p>Aucun ticket disponible.</p>
+        <% } else { %> <% tickets.forEach(ticket => { %>
+        <div class="ticket">
+          <div class="ticket-header">
+            <h2 class="ticket-title">
+              <a href="/tickets/<%= ticket.id %>"><%= ticket.titre %></a>
+            </h2>
+
+            <p class="ticket-description"><%- ticket.description %></p>
+
+            <div class="ticket-etat">
+              <% switch (ticket.etat) { %> <% case 'OUVERT': %>
+              <span class="ticket-etat ouvert">Ouvert</span>
+              <% break; %> <% case 'FERME': %> <% case 'CLOS': %>
+              <span class="ticket-etat clos">Clos</span>
+              <% break; %> <% default: %>
+              <span class="ticket-etat inconnu">État inconnu</span>
+              <% } %>
             </div>
-         </section>
-<!--      <div>
-        <% tickets.forEach(ticket => { %>
-          <tr>
-            <td><%= ticket.titre %></td>
-            <td><%= ticket.date_creation %></td>
 
-            <td><%= ticket.description %></td>
-            <td><%= ticket.etat %></td>
-          </tr>
-        <% }) %>
-        </div>>     -->  
+            <div class="ticket-meta">
+              <span class="ticket-auteur"><%= ticket.auteur.name %></span>
+              <span class="ticket-date"><%= ticket.creation_formatted %></span>
+            </div>
+          </div>
+        </div>
+        <% }) %> <% } %>
+      </section>
+    </main>
 
-  <%- include('fragments/footer') %>
-
+    <%- include('fragments/footer') %>
   </body>
 </html>
